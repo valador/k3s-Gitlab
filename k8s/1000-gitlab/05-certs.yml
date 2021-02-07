@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: gitlab-home
+  namespace: gitlab
+spec:
+  secretName: gitlab-home-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: gitlab.dev.lan
+  dnsNames:
+    - gitlab.dev.lan
+    - reg.gitlab.dev.lan
+  acme:
+    config:
+      - http01:
+          ingressClass: traefik
+        domains:
+          - gitlab.dev.lan
+          - reg.gitlab.dev.lan
