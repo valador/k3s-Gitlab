@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: gitlab
-          image: gitlab/gitlab-ce:13.8.1-ce.0
+          image: gitlab/gitlab-ce:13.8.3-ce.0
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: config-volume
