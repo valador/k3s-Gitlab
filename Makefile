@@ -6,6 +6,11 @@ SHELL := /bin/bash
 help:
 	make -pRrq -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 # Set up docker-registry
+.PHONY: reg-create reg-delete
+reg-create:
+        sudo kubectl apply -f ./registry/docker-registry.yaml
+reg-delete:
+        sudo kubectl delete -f ./registry/docker-registry.yaml
 
 # base gitlab installation
 .PHONY: gitlab-up gitlab-down
