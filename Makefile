@@ -1,5 +1,7 @@
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 
+SHELL := /bin/bash
+
 .PHONY: help
 help:
 	make -pRrq -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
@@ -22,3 +24,13 @@ gitlab-down:
 	sudo kubectl delete -f ./k8s/1000-gitlab/05-certs.yml.SELF
 	sudo kubectl delete -f ./k8s/1000-gitlab/00-namespace.yml
 	sudo rm -rf /srv
+
+.PHONY: cluster-admin-create cluster-admin-delete
+cluster-admin-create:
+	sudo kubectl apply -f ./k8s/utils/gitlab-admin-service-account.yaml
+cluster-admin-delete:
+	sudo kubectl delete -f ./k8s/utils/gitlab-admin-service-account.yaml
+# for ./secrets dir
+.PHONY: cluster-secrets
+cluster-secrets:
+	sudo ./get-token.sh

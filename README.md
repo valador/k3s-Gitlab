@@ -240,6 +240,7 @@ Example:
 $ sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/gitlab-config
 $ export KUBECONFIG=~/.kube/gitlab-config
 $ kubectl cluster-info
+$ kubectl cluster-info | grep -E 'Kubernetes master|Kubernetes control plane' | awk '/http/ {print $NF}'
 Kubernetes master is running at https://127.0.0.1:6443
 CoreDNS is running at https://127.0.0.1:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 Metrics-server is running at https://127.0.0.1:6443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
