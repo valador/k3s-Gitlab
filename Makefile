@@ -8,9 +8,9 @@ help:
 # Set up docker-registry
 .PHONY: reg-create reg-delete
 reg-create:
-        sudo kubectl apply -f ./registry/docker-registry.yaml
+	sudo kubectl apply -f ./registry/docker-registry.yaml
 reg-delete:
-        sudo kubectl delete -f ./registry/docker-registry.yaml
+	sudo kubectl delete -f ./registry/docker-registry.yaml
 
 # base gitlab installation
 .PHONY: gitlab-up gitlab-down

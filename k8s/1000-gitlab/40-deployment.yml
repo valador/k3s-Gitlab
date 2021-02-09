@@ -20,6 +20,22 @@ spec:
         - name: gitlab
           image: gitlab/gitlab-ce:13.8.3-ce.0
           imagePullPolicy: IfNotPresent
+          env:
+            - name: GITLAB_OMNIBUS_CONFIG
+              value: |
+                postgresql['enable'] = false
+                gitlab_rails['db_username'] = "gitlab"
+                gitlab_rails['db_password'] = "gitlab"
+                gitlab_rails['db_host'] = "postgresql"
+                gitlab_rails['db_port'] = "5432"
+                gitlab_rails['db_database'] = "gitlab_home_dev"
+                gitlab_rails['db_adapter'] = 'postgresql'
+                gitlab_rails['db_encoding'] = 'utf8'
+                redis['enable'] = false
+                gitlab_rails['redis_host'] = 'redis'
+                gitlab_rails['redis_port'] = '6379'
+                gitlab_rails['gitlab_shell_ssh_port'] = 30022
+                external_url 'http://gitlab.dev.lan:30080'
           volumeMounts:
             - name: config-volume
               mountPath: /etc/gitlab

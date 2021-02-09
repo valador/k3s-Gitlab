@@ -262,7 +262,7 @@ $ sudo diff coredns-fixes.yaml /var/lib/rancher/k3s/server/manifests/coredns.yam
 <     lan:53 {
 <         errors
 <         cache 30
-<         forward . 192.168.0.101
+<         forward . 192.168.1.1
 <     }
 $ kubectl apply -f ./k8s/utils/coredns-fixes.yaml
 serviceaccount/coredns unchanged
