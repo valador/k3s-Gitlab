@@ -11,11 +11,11 @@ spec:
   commonName: gitlab.dev.lan
   dnsNames:
     - gitlab.dev.lan
-    - reg.gitlab.dev.lan
+    #- reg.gitlab.dev.lan
   acme:
     config:
       - http01:
           ingressClass: traefik
         domains:
           - gitlab.dev.lan
-          - reg.gitlab.dev.lan
+          #- reg.gitlab.dev.lan
