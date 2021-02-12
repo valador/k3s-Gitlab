@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: gitlab
+  name: gitlab-ing
   namespace: gitlab
   labels:
     app: gitlab
@@ -19,18 +19,18 @@ spec:
               name: gitlab
               port:
                 number: 80
-    - host: reg.gitlab.dev.lan
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: gitlab
-              port:
-                number: 5050
+#    - host: reg.gitlab.dev.lan
+#      http:
+#        paths:
+#        - path: /
+#          pathType: Prefix
+#          backend:
+#            service:
+#              name: gitlab
+#              port:
+#                number: 5050
   tls:
     - hosts:
-        - reg.gitlab.dev.lan
+        #- reg.gitlab.dev.lan
         - gitlab.dev.lan
       secretName: gitlab-home-tls
