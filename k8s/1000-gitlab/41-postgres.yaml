@@ -59,7 +59,12 @@ spec:
           volumeMounts:
             - name: postgresql
               mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: postgresql
-          persistentVolumeClaim:
-            claimName: postgres-claim
+  volumeClaimTemplates:
+  - metadata:
+      name: postgresql
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 10Gi
