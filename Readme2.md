@@ -30,21 +30,26 @@ Now, you're almost ready to deploy from Kubernetes from GitLab.
 
 # Порядок запуска:
 ## 1:
-```
-sudo kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
+```bash
+# Устанавливаем менеджер сертификатов в кластер
+sudo kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.yaml
 ```
 ## 2: 
-```
-sudo kubectl create -f ./k8s/1000-gitlab/00-namespace.yml
-sudo kubectl apply -f ./k8s/1000-gitlab/05-certs.yml.SELF
+```bash
+# Заказываем сертификаты
+sudo kubectl apply -f ./k8s/0000-global/003-issuer.SELF.yml
+sudo kubectl apply -f ./k8s/0000-global/005-clusterissuer.SELF.yml
 ```
 ## 3:
 ```bash
-sudo kubectl apply -f ./k8s/0000-global/003-issuer.yml.SELF
-sudo kubectl apply -f ./k8s/0000-global/005-clusterissuer.yml.SELF 
+# Создаем область имен gitlab
+sudo kubectl create -f ./k8s/1000-gitlab/00-namespace.yml
+# Выпускаем сертификат
+sudo kubectl apply -f ./k8s/1000-gitlab/05-certs.SELF.yml
 ```
 ## 4:
-```
+```bash
+# Проверяем сертификат (certificates или certificate?)
 sudo kubectl describe certificates gitlab-home -n gitlab
 ```
 ## 5:
@@ -52,14 +57,16 @@ sudo kubectl describe certificates gitlab-home -n gitlab
 ```
 Created new CertificateRequest resource "gitlab-home-s94nj"
 ```
-gitlab-home-s94nj - используем дальше:
-```
+* gitlab-home-s94nj - используем дальше:
+```bash
 sudo kubectl describe certificaterequest gitlab-home-s94nj -n gitlab
 ```
-выдает ошибку:
+* выдает ошибку:
 ```
 Normal  IssuerNotFound     82s (x5 over 82s)  cert-manager  Referenced "ClusterIssuer" not found: clusterissuer.cert-manager.io "selfsigned-issuer" not found
 ```
 разобраться.
 ## 6:
+```bash
 sudo kubectl describe challenges gitlab-home-s94nj -n gitlab
+```
