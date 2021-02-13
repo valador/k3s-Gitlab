@@ -39,6 +39,8 @@ spec:
           volumeMounts:
             - name: redis
               mountPath: /data
+            - name: redis
+              mountPath: /var/lib/redis
   volumeClaimTemplates:
   - metadata:
       name: redis
