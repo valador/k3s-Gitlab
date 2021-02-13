@@ -50,6 +50,7 @@ sudo kubectl apply -f ./k8s/1000-gitlab/05-certs.SELF.yml
 ## 4:
 ```bash
 # Проверяем сертификат (certificates или certificate?)
+# Создается новый ресурс CertificateRequest (если самоподписанный - не нужно)
 sudo kubectl describe certificates gitlab-home -n gitlab
 ```
 ## 5:
@@ -59,14 +60,11 @@ Created new CertificateRequest resource "gitlab-home-s94nj"
 ```
 * gitlab-home-s94nj - используем дальше:
 ```bash
+# отметка о создании Order(если самоподписанный - не нужно)
 sudo kubectl describe certificaterequest gitlab-home-s94nj -n gitlab
 ```
-* выдает ошибку:
-```
-Normal  IssuerNotFound     82s (x5 over 82s)  cert-manager  Referenced "ClusterIssuer" not found: clusterissuer.cert-manager.io "selfsigned-issuer" not found
-```
-разобраться.
 ## 6:
 ```bash
+# Статус проверки (самоподписанный не видит)
 sudo kubectl describe challenges gitlab-home-s94nj -n gitlab
 ```

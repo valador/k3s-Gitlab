@@ -15,18 +15,15 @@ reg-delete:
 # base gitlab installation
 .PHONY: gitlab-up gitlab-down
 gitlab-up:
-	sudo kubectl create -f ./k8s/1000-gitlab/00-namespace.yml
-	sudo kubectl apply -f ./k8s/1000-gitlab/05-certs.yml.SELF
 	sudo kubectl create -f ./k8s/1000-gitlab/10-services.yml
 	sudo kubectl create -f ./k8s/1000-gitlab/40-deployment.yml
+	sudo kubectl create -f ./k8s/1000-gitlab/41-postgres.yaml
 	sudo kubectl create -f ./k8s/1000-gitlab/50-ingress.yml
 gitlab-down:
 	sudo kubectl delete -f ./k8s/1000-gitlab/50-ingress.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/40-deployment.yml
+	sudo kubectl delete -f ./k8s/1000-gitlab/41-postgres.yaml
 	sudo kubectl delete -f ./k8s/1000-gitlab/10-services.yml
-	sudo kubectl delete -f ./k8s/1000-gitlab/05-certs.yml.SELF
-	sudo kubectl delete -f ./k8s/1000-gitlab/00-namespace.yml
-	sudo rm -rf /srv
 
 .PHONY: cluster-admin-create cluster-admin-delete
 cluster-admin-create:
