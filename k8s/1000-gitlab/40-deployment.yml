@@ -38,6 +38,12 @@ spec:
             - name: GITLAB_OMNIBUS_CONFIG
               value: |
                 external_url 'http://gitlab.dev.lan:30080'
+                nginx['listen_port'] = 80
+                nginx['listen_https'] = false
+                nginx['proxy_set_headers'] = {
+                  'X-Forwarded-Proto' => 'https',
+                  'X-Forwarded-Ssl' => 'on'
+                }
                 postgresql['enable'] = false
                 gitlab_rails['db_username'] = "gitlab"
                 gitlab_rails['db_password'] = "gitlab"
@@ -50,6 +56,8 @@ spec:
                 gitlab_rails['redis_host'] = 'redis'
                 gitlab_rails['redis_port'] = '6379'
                 gitlab_rails['gitlab_shell_ssh_port'] = 30022
+                prometheus['monitor_kubernetes'] = false
+                
           volumeMounts:
             - name: gitlab
               mountPath: /etc/gitlab
@@ -59,9 +67,9 @@ spec:
               subPath: gitlab_data
           ports:
             - name: http-web
-              containerPort: 30080
+              containerPort: 80
             - name: tcp-ssh
-              containerPort: 30022
+              containerPort: 22
       volumes:
         - name: gitlab
           persistentVolumeClaim:

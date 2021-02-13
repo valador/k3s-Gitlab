@@ -11,4 +11,3 @@ spec:
   commonName: gitlab.dev.lan
   dnsNames:
     - gitlab.dev.lan
-    #- reg.gitlab.dev.lan

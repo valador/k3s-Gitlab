@@ -27,3 +27,39 @@ On the next screen,
 - Once the installation of the runner is finished, you can check if the runner is correctly registered by reaching the runner's section of the administration console (/admin/runners).
 
 Now, you're almost ready to deploy from Kubernetes from GitLab.
+
+# Порядок запуска:
+## 1:
+```
+sudo kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
+```
+## 2: 
+```
+sudo kubectl create -f ./k8s/1000-gitlab/00-namespace.yml
+sudo kubectl apply -f ./k8s/1000-gitlab/05-certs.yml.SELF
+```
+## 3:
+```bash
+sudo kubectl apply -f ./k8s/0000-global/003-issuer.yml.SELF
+sudo kubectl apply -f ./k8s/0000-global/005-clusterissuer.yml.SELF 
+```
+## 4:
+```
+sudo kubectl describe certificates gitlab-home -n gitlab
+```
+## 5:
+ищем строчку:
+```
+Created new CertificateRequest resource "gitlab-home-s94nj"
+```
+gitlab-home-s94nj - используем дальше:
+```
+sudo kubectl describe certificaterequest gitlab-home-s94nj -n gitlab
+```
+выдает ошибку:
+```
+Normal  IssuerNotFound     82s (x5 over 82s)  cert-manager  Referenced "ClusterIssuer" not found: clusterissuer.cert-manager.io "selfsigned-issuer" not found
+```
+разобраться.
+## 6:
+sudo kubectl describe challenges gitlab-home-s94nj -n gitlab

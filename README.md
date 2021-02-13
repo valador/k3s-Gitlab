@@ -540,7 +540,7 @@ NAME     CLASS    HOSTS                                           ADDRESS       
 gitlab   <none>   gitlab.dev.davar.com,reg.gitlab.dev.davar.com   192.168.0.101   80, 443   51m
 
 
-$  kubectl describe certificate -n gitlab gitlab-davar
+$  kubectl describe certificate -n gitlab gitlab-home
 Name:         gitlab-davar
 Namespace:    gitlab
 Labels:       <none>
