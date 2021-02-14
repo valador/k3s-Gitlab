@@ -1,1 +1,3 @@
 .idea
+secrets/CA.txt
+secrets/TOKEN.txt

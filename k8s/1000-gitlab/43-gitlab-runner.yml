@@ -26,7 +26,7 @@ spec:
           privileged: true
         env:
         - name: CI_SERVER_URL
-          value: "http://gitlab/ci"
+          value: "http://gitlab-svc/ci"
         - name: RUNNER_NAME
           value: "Gitlab Runner kubernetes"
         - name: REGISTRATION_TOKEN
