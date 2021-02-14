@@ -15,9 +15,9 @@ reg-delete:
 # base gitlab installation
 .PHONY: gitlab-up gitlab-down
 gitlab-up:
-	sudo kubectl create -f ./k8s/1000-gitlab/40-deployment.yml
 	sudo kubectl create -f ./k8s/1000-gitlab/41-postgres.yaml
 	sudo kubectl create -f ./k8s/1000-gitlab/42-redis.yml
+	sudo kubectl create -f ./k8s/1000-gitlab/40-deployment.yml
 	sudo kubectl create -f ./k8s/1000-gitlab/43-gitlab-runner.yml
 	sudo kubectl create -f ./k8s/1000-gitlab/50-ingress.yml
 gitlab-down:
@@ -26,6 +26,8 @@ gitlab-down:
 	sudo kubectl delete -f ./k8s/1000-gitlab/40-deployment.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/41-postgres.yaml
 	sudo kubectl delete -f ./k8s/1000-gitlab/42-redis.yml
+	sudo kubectl delete -n gitlab persistentvolumeclaim postgresql-postgresql-0
+	
 
 .PHONY: cluster-admin-create cluster-admin-delete
 cluster-admin-create:
