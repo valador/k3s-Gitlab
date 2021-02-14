@@ -16,7 +16,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: gitlab
+              name: gitlab-svc
               port:
                 number: 80
 #    - host: reg.gitlab.dev.lan

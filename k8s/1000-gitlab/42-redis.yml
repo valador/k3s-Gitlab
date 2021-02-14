@@ -74,8 +74,10 @@ spec:
           volumeMounts:
             - name: redis
               mountPath: /data
+              subPath: redis_data
             - name: redis
               mountPath: /var/lib/redis
+              subPath: lib_redis
       volumes:
         - name: redis
           persistentVolumeClaim:

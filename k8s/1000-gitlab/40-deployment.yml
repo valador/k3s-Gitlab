@@ -34,7 +34,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitlab-http-svc
+  name: gitlab-svc
   namespace: gitlab
   labels:
     app: gitlab
