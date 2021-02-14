@@ -61,9 +61,9 @@ spec:
   ports:
     - name: ssh
       protocol: "TCP"
-      port: 30022
+      port: 22
       targetPort: 22
-  type: LoadBalancer 
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
