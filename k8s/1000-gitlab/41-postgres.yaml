@@ -125,7 +125,7 @@ spec:
       #   fsGroup: 998
       containers:
       - name: postgresql
-        image: postgres:12.6-alpine
+        image: postgres:12-alpine
         ports:
         - containerPort: 5432
           name: postgres
