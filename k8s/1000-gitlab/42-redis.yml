@@ -1,8 +1,41 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-data-vol
+  namespace: gitlab
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    #- ReadOnlyMany
+    - ReadWriteOnce
+  # persistentVolumeReclaimPolicy: Delete
+  storageClassName: redis-data #Задаем имя класса хранилища
+  hostPath:
+    path: "/tmp/gitlab-redis"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-claim
+  namespace: gitlab
+  labels:
+    app: redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: redis-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: redis-svc
+  namespace: gitlab
   labels:
     app: gitlab
 spec:
@@ -12,23 +45,25 @@ spec:
       port: 6379
       targetPort: 6379
   selector:
-    app: gitlab
-    tier: backend
+    app: redis
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
+  namespace: gitlab
   labels:
-    app: gitlab
+    app: redis
 spec:
+  selector:
+    matchLabels:
+      app: redis # has to match .spec.template.metadata.labels
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: gitlab
-        tier: backend
+        app: redis
     spec:
       containers:
         - image: redis:6.2-rc3-alpine
@@ -41,12 +76,7 @@ spec:
               mountPath: /data
             - name: redis
               mountPath: /var/lib/redis
-  volumeClaimTemplates:
-  - metadata:
-      name: redis
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "local-path"
-      resources:
-        requests:
-          storage: 10Gi
+      volumes:
+        - name: redis
+          persistentVolumeClaim:
+            claimName: redis-claim

@@ -1,53 +1,144 @@
----
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: postgresql-data-vol
+#   namespace: gitlab
+#   labels:
+#     type: local
+# spec:
+#   capacity:
+#     storage: 5Gi
+#   accessModes:
+#     #- ReadOnlyMany
+#     - ReadWriteOnce
+#   # persistentVolumeReclaimPolicy: Delete
+#   storageClassName: postgresql-data #Задаем имя класса хранилища
+#   hostPath:
+#     path: "/tmp/gitlab-postgres"
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: postgresql-claim
+#   namespace: gitlab
+#   labels:
+#     app: gitlab
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 10Gi
+#   storageClassName: postgresql-data
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: postgresql-svc
+#   namespace: gitlab
+#   labels:
+#     app: gitlab
+# spec:
+#   ports:
+#     - name: postgres
+#       protocol: "TCP"
+#       port: 5432
+#       targetPort: 5432
+#   selector:
+#     app: gitlab
+#     # tier: postgreSQL
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: postgresql
+#   namespace: gitlab
+#   labels:
+#     app: gitlab
+# spec:
+#   strategy:
+#     type: Recreate
+#   template:
+#     metadata:
+#       labels:
+#         app: gitlab
+#         # tier: postgreSQL
+#     spec:
+#       containers:
+#         - image: postgres:12.6-alpine
+#           name: postgresql
+#           env:
+#             - name: POSTGRES_USER
+#               value: gitlab
+#             - name: POSTGRES_DB
+#               value: gitlab_home_dev
+#             - name: POSTGRES_PASSWORD
+#               value: gitlab
+#           ports:
+#             - containerPort: 5432
+#               name: postgresql
+#           volumeMounts:
+#             - name: postgresql
+#               mountPath: /var/lib/postgresql/data
+#       volumes:
+#         - name: postgresql
+#           persistentVolumeClaim:
+#             claimName: postgresql-claim
+# -------------------------------------------------------------
 apiVersion: v1
 kind: Service
 metadata:
   name: postgresql-svc
   namespace: gitlab
   labels:
-    app: gitlab
+    app: postgresql
 spec:
   ports:
-    - name: postgres
-      protocol: "TCP"
-      port: 5432
-      targetPort: 5432
+  - name: postgres
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+  clusterIP: None
+  #type: LoadBalancer
   selector:
-    app: gitlab
-    tier: postgreSQL
+    app: postgresql
+    # tier: postgreSQL
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: postgresql
   namespace: gitlab
-  labels:
-    app: gitlab
 spec:
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: postgresql # has to match .spec.template.metadata.labels
+  serviceName: "postgresql-svc"
+  replicas: 1 # by default is 1
   template:
     metadata:
       labels:
-        app: gitlab
-        tier: postgreSQL
+        app: postgresql # has to match .spec.selector.matchLabels
     spec:
+      terminationGracePeriodSeconds: 10
+      # securityContext:
+      #   fsGroup: 998
       containers:
-        - image: postgres:12.6-alpine
-          name: postgresql
-          env:
-            - name: POSTGRES_USER
-              value: gitlab
-            - name: POSTGRES_DB
-              value: gitlab_home_dev
-            - name: POSTGRES_PASSWORD
-              value: gitlab
-          ports:
-            - containerPort: 5432
-              name: postgresql
-          volumeMounts:
-            - name: postgresql
-              mountPath: /var/lib/postgresql/data
+      - name: postgresql
+        image: postgres:12.6-alpine
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: POSTGRES_USER
+          value: gitlab
+        - name: POSTGRES_DB
+          value: gitlab_home_dev
+        - name: POSTGRES_PASSWORD
+          value: gitlab
+        volumeMounts:
+        - name: postgresql
+          mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
   - metadata:
       name: postgresql
