@@ -19,18 +19,18 @@ spec:
               name: gitlab-svc
               port:
                 number: 80
-#    - host: reg.gitlab.dev.lan
-#      http:
-#        paths:
-#        - path: /
-#          pathType: Prefix
-#          backend:
-#            service:
-#              name: gitlab
-#              port:
-#                number: 5050
+    - host: reg.gitlab.dev.lan
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: gitlab-svc
+              port:
+                number: 5005
   tls:
     - hosts:
-        #- reg.gitlab.dev.lan
+        - reg.gitlab.dev.lan
         - gitlab.dev.lan
       secretName: gitlab-home-tls

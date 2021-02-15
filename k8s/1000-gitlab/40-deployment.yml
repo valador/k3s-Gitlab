@@ -46,6 +46,11 @@ spec:
       protocol: "TCP"
       port: 80
       targetPort: 80
+    - name: http-reg
+      protocol: "TCP"
+      port: 5005
+      targetPort: 5005
+
   type: ClusterIP
 ---
 apiVersion: v1
@@ -115,6 +120,13 @@ spec:
                 gitlab_rails['initial_root_password'] = "Ecx85GAZbbRJiV"
                 gitlab_rails['registry_enabled'] = true
                 gitlab_rails['registry_api_url'] = "http://docker-registry-svc:5000"
+                registry_external_url 'https://reg.gitlab.dev.lan'
+                registry_nginx['listen_port'] = 5005
+                registry_nginx['listen_https'] = false
+                registry_nginx['proxy_set_headers'] = {
+                  'X-Forwarded-Proto' => 'https',
+                  'X-Forwarded-Ssl' => 'on'
+                }
           volumeMounts:
             - name: gitlab
               mountPath: /etc/gitlab
@@ -127,6 +139,8 @@ spec:
               containerPort: 80
             - name: tcp-ssh
               containerPort: 22
+            - name: http-reg
+              containerPort: 5005
       volumes:
         - name: gitlab
           persistentVolumeClaim:

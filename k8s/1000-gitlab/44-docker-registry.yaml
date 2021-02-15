@@ -13,7 +13,7 @@ data:
         - nosniff
     log:
       fields:
-        service: registry
+        service: docker-registry-svc
     storage:
       cache:
         blobdescriptor: inmemory
