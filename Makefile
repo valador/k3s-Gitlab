@@ -26,8 +26,11 @@ gitlab-down:
 	sudo kubectl delete -f ./k8s/1000-gitlab/40-deployment.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/41-postgres.yaml
 	sudo kubectl delete -f ./k8s/1000-gitlab/42-redis.yml
+.PHONY: gitlab-purge
+gitlab-purge:
 	sudo kubectl delete -n gitlab persistentvolumeclaim postgresql-postgresql-0
-	
+	sudo rm -rf /tmp/gitlab
+	sudo rm -rf /tmp/gitlab-redis
 
 .PHONY: cluster-admin-create cluster-admin-delete
 cluster-admin-create:

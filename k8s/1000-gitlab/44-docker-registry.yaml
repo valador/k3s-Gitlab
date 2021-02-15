@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: registry
----
-apiVersion: v1
 data:
   config.yml: |-
     health:
@@ -65,12 +60,12 @@ spec:
         - serve
         - /etc/docker/registry/config.yml
         env:
-        - name: REGISTRY_HTTP_SECRET
+        - name: gitlab_HTTP_SECRET
           valueFrom:
             secretKeyRef:
               key: haSharedSecret
               name: docker-registry-secret
-        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+        - name: gitlab_STORAGE_FILESYSTEM_ROOTDIRECTORY
           value: /var/lib/registry
         image: registry:latest
         imagePullPolicy: IfNotPresent
@@ -128,7 +123,7 @@ metadata:
 spec:
   externalTrafficPolicy: Cluster
   ports:
-  - name: registry
+  - name: gitlab
     nodePort: 31500
     port: 5000
     protocol: TCP
