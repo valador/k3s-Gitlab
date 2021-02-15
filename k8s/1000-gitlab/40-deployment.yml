@@ -50,7 +50,6 @@ spec:
       protocol: "TCP"
       port: 5005
       targetPort: 5005
-
   type: ClusterIP
 ---
 apiVersion: v1
