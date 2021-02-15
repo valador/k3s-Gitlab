@@ -14,7 +14,7 @@ spec:
   # persistentVolumeReclaimPolicy: Delete
   storageClassName: redis-data #Задаем имя класса хранилища
   hostPath:
-    path: "/tmp/gitlab-redis"
+    path: "/srv/gitlab-redis"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

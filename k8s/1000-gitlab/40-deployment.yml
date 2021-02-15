@@ -14,7 +14,7 @@ spec:
   # persistentVolumeReclaimPolicy: Delete
   storageClassName: gitlab-data #Задаем имя класса хранилища
   hostPath:
-    path: "/tmp/gitlab"
+    path: "/srv/gitlab"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -122,10 +122,6 @@ spec:
                 registry_external_url 'https://reg.gitlab.dev.lan'
                 registry_nginx['listen_port'] = 5005
                 registry_nginx['listen_https'] = false
-                registry_nginx['proxy_set_headers'] = {
-                  'X-Forwarded-Proto' => 'https',
-                  'X-Forwarded-Ssl' => 'on'
-                }
           volumeMounts:
             - name: gitlab
               mountPath: /etc/gitlab

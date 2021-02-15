@@ -31,7 +31,7 @@ spec:
             path: /ci
             port: 443
             scheme: HTTPS
-          periodSeconds: 10
+          periodSeconds: 120
           successThreshold: 1
           timeoutSeconds: 5
         env:
