@@ -31,6 +31,7 @@ gitlab-down:
 .PHONY: gitlab-purge
 gitlab-purge:
 	sudo kubectl delete -n gitlab persistentvolumeclaim postgresql-postgresql-0
+	sudo kubectl delete -n gitlab persistentvolumeclaim data-docker-registry-0
 	sudo rm -rf /tmp/gitlab
 	sudo rm -rf /tmp/gitlab-redis
 
