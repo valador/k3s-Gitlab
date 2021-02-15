@@ -17,11 +17,13 @@ reg-delete:
 gitlab-up:
 	sudo kubectl create -f ./k8s/1000-gitlab/41-postgres.yaml
 	sudo kubectl create -f ./k8s/1000-gitlab/42-redis.yml
+	sudo kubectl create -f ./k8s/1000-gitlab/44-docker-registry.yaml
 	sudo kubectl create -f ./k8s/1000-gitlab/40-deployment.yml
 	sudo kubectl create -f ./k8s/1000-gitlab/43-gitlab-runner.yml
 	sudo kubectl create -f ./k8s/1000-gitlab/50-ingress.yml
 gitlab-down:
 	sudo kubectl delete -f ./k8s/1000-gitlab/50-ingress.yml
+	sudo kubectl delete -f ./k8s/1000-gitlab/44-docker-registry.yaml
 	sudo kubectl delete -f ./k8s/1000-gitlab/43-gitlab-runner.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/40-deployment.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/41-postgres.yaml

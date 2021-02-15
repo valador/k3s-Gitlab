@@ -23,7 +23,7 @@ metadata:
   labels:
     app: docker-registry
   name: docker-registry-config
-  namespace: registry
+  namespace: gitlab
 ---
 apiVersion: v1
 data:
@@ -34,19 +34,19 @@ metadata:
     app: docker-registry
     chart: docker-registry-1.4.3
   name: docker-registry-secret
-  namespace: registry
+  namespace: gitlab
 type: Opaque
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: docker-registry
-  namespace: registry
+  namespace: gitlab
 spec:
   selector:
     matchLabels:
       app: docker-registry
-  serviceName: "registry"
+  serviceName: "docker-registry-svc"
   replicas: 1
   template:
     metadata:
@@ -60,12 +60,12 @@ spec:
         - serve
         - /etc/docker/registry/config.yml
         env:
-        - name: gitlab_HTTP_SECRET
+        - name: REGISTRY_HTTP_SECRET
           valueFrom:
             secretKeyRef:
               key: haSharedSecret
               name: docker-registry-secret
-        - name: gitlab_STORAGE_FILESYSTEM_ROOTDIRECTORY
+        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
           value: /var/lib/registry
         image: registry:latest
         imagePullPolicy: IfNotPresent
@@ -118,17 +118,16 @@ kind: Service
 metadata:
   labels:
     app: docker-registry
-  name: docker-registry
-  namespace: registry
+  name: docker-registry-svc
+  namespace: gitlab
 spec:
-  externalTrafficPolicy: Cluster
+  #externalTrafficPolicy: Cluster
   ports:
-  - name: gitlab
-    nodePort: 31500
+  - name: registry
     port: 5000
     protocol: TCP
     targetPort: 5000
   selector:
     app: docker-registry
   sessionAffinity: None
-  type: NodePort
+  type: ClusterIP
