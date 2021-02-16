@@ -6,6 +6,7 @@ metadata:
   labels:
     app: gitlab
   annotations:
+    cert-manager.io/cluster-issuer: selfsigned-issuer
     traefik.ingress.kubernetes.io/redirect-entry-point: https
 spec:
   rules:

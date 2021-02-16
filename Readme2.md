@@ -32,28 +32,27 @@ Now, you're almost ready to deploy from Kubernetes from GitLab.
 ## 1:
 ```bash
 # Устанавливаем менеджер сертификатов в кластер
-sudo kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.yaml
+make prepear-cert-manager
 ```
 ## 2: 
 ```bash
-# Заказываем сертификаты
-sudo kubectl apply -f ./k8s/0000-global/003-issuer.SELF.yml
-sudo kubectl apply -f ./k8s/0000-global/005-clusterissuer.SELF.yml
+# Заказываем сертификаты, создаем сертификаты, 
+# создаем аккаунт администратора кластера, создаем область имен gitlab
+make prepear-init
 ```
 ## 3:
 ```bash
-# Создаем область имен gitlab
-sudo kubectl create -f ./k8s/1000-gitlab/00-namespace.yml
-# Выпускаем сертификат
-sudo kubectl apply -f ./k8s/1000-gitlab/05-certs.SELF.yml
+# подымаем гитлаб и зависимости(redis, postgres, runner)
+make gitlab-up
 ```
-## 4:
+# Для деплоя в с валидным доменом (а не с самоподписаным)
+## 1:
 ```bash
 # Проверяем сертификат (certificates или certificate?)
 # Создается новый ресурс CertificateRequest (если самоподписанный - не нужно)
 sudo kubectl describe certificates gitlab-home -n gitlab
 ```
-## 5:
+## 2:
 ищем строчку:
 ```
 Created new CertificateRequest resource "gitlab-home-s94nj"
@@ -63,7 +62,7 @@ Created new CertificateRequest resource "gitlab-home-s94nj"
 # отметка о создании Order(если самоподписанный - не нужно)
 sudo kubectl describe certificaterequest gitlab-home-s94nj -n gitlab
 ```
-## 6:
+## 3:
 ```bash
 # Статус проверки (самоподписанный не видит)
 sudo kubectl describe challenges gitlab-home-s94nj -n gitlab
