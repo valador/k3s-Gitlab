@@ -24,16 +24,16 @@ spec:
         #     mountPath: /var/run/docker.sock
         securityContext:
           privileged: true
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            host: gitlab.dev.lan
-            path: /ci
-            port: 443
-            scheme: HTTPS
-          periodSeconds: 120
-          successThreshold: 1
-          timeoutSeconds: 5
+        # livenessProbe:
+        #   failureThreshold: 3
+        #   httpGet:
+        #     host: gitlab.dev.lan
+        #     path: /ci
+        #     port: 443
+        #     scheme: HTTPS
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   timeoutSeconds: 1
         env:
         - name: CI_SERVER_URL
           value: "http://gitlab-svc/ci"

@@ -6,30 +6,31 @@ metadata:
   labels:
     app: gitlab
   annotations:
+    kubernetes.io/tls-acme: 'true'
     cert-manager.io/cluster-issuer: selfsigned-issuer
     traefik.ingress.kubernetes.io/redirect-entry-point: https
 spec:
   rules:
-    - host: gitlab.dev.lan
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: gitlab-svc
-              port:
-                number: 80
-    - host: reg.gitlab.dev.lan
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: gitlab-svc
-              port:
-                number: 5005
+  - host: "gitlab.dev.lan"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: gitlab-svc
+            port:
+              number: 80
+  - host: "reg.gitlab.dev.lan"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: gitlab-svc
+            port:
+              number: 5005
   tls:
     - hosts:
         #- reg.gitlab.dev.lan
