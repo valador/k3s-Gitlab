@@ -6,13 +6,18 @@ SHELL := /bin/bash
 help:
 	make -pRrq -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 # Set up docker-registry
-.PHONY: prepear-init prepear-delete prepear-cert-manager
-prepear-cert-manager:
+.PHONY: prepear-init prepear-delete prepear-cert-manager-up prepear-cert-manager-delete prepear-namespace-up prepear-namespace-down
+prepear-cert-manager-up:
 	sudo kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.yaml
+prepear-cert-manager-delete:
+	sudo kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.yaml
+prepear-namespace-up:
+	sudo kubectl apply -f ./k8s/1000-gitlab/00-namespace.yml
+prepear-namespace-down:
+	sudo kubectl delete -f ./k8s/1000-gitlab/00-namespace.yml
 prepear-init:
 	sudo kubectl apply -f ./k8s/0000-global/003-issuer.SELF.yml
 	sudo kubectl apply -f ./k8s/0000-global/005-clusterissuer.SELF.yml
-	sudo kubectl apply -f ./k8s/1000-gitlab/00-namespace.yml
 	sudo kubectl apply -f ./k8s/1000-gitlab/05-certs.SELF.yml
 	sudo kubectl apply -f ./k8s/utils/gitlab-admin-service-account.yaml
 prepear-delete:
@@ -20,8 +25,6 @@ prepear-delete:
 	sudo kubectl delete -f ./k8s/0000-global/005-clusterissuer.SELF.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/05-certs.SELF.yml
 	sudo kubectl delete -f ./k8s/utils/gitlab-admin-service-account.yaml
-	sudo kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.yaml
-	sudo kubectl delete -f ./k8s/1000-gitlab/00-namespace.yml
 # base gitlab installation
 .PHONY: gitlab-up gitlab-down
 gitlab-up:

@@ -32,18 +32,28 @@ Now, you're almost ready to deploy from Kubernetes from GitLab.
 ## 1:
 ```bash
 # Устанавливаем менеджер сертификатов в кластер
-make prepear-cert-manager
+make prepear-cert-manager-up
 ```
 ## 2: 
+```bash
+# создаем область имен gitlab
+make prepear-namespace-up
+```
+## 3: 
 ```bash
 # Заказываем сертификаты, создаем сертификаты, 
 # создаем аккаунт администратора кластера, создаем область имен gitlab
 make prepear-init
 ```
-## 3:
+## 4:
 ```bash
-# подымаем гитлаб и зависимости(redis, postgres, runner)
+# подымаем гитлаб и зависимости(redis, postgres)
 make gitlab-up
+```
+## 5:
+```bash
+# подымаем gitlab runner
+make gitlab-runner-up
 ```
 # Для деплоя в с валидным доменом (а не с самоподписаным)
 ## 1:
@@ -66,4 +76,29 @@ sudo kubectl describe certificaterequest gitlab-home-s94nj -n gitlab
 ```bash
 # Статус проверки (самоподписанный не видит)
 sudo kubectl describe challenges gitlab-home-s94nj -n gitlab
+```
+
+```bash
+$ kubectl get certs
+NAME             AGE
+ccp-mysql-cert   5m
+
+$ kubectl get cert ccp-mysql-cert -o=jsonpath='{.spec.secretName}'
+ccp-mysql-cert-secret
+
+$ kubectl get secret ccp-mysql-cert-secret
+NAME                    TYPE                DATA   AGE
+ccp-mysql-cert-secret   kubernetes.io/tls   2      73m
+
+# delete cert
+$ kubectl delete cert ccp-mysql-cert 
+certificate.certmanager.k8s.io "ccp-mysql-cert" deleted
+
+$ kubectl get certs
+NAME          AGE
+
+# stale secret of deleted cert still exists
+$ kubectl get secret ccp-mysql-cert-secret
+NAME                    TYPE                DATA   AGE
+ccp-mysql-cert-secret   kubernetes.io/tls   2      74m
 ```
