@@ -33,6 +33,6 @@ spec:
               number: 5005
   tls:
     - hosts:
-        - reg.gitlab.dev.lan
-        - gitlab.dev.lan
+        #- reg.gitlab.dev.lan
+        - "*.gitlab.dev.lan"
       secretName: gitlab-home-tls
