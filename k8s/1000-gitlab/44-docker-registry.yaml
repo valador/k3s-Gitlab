@@ -83,7 +83,7 @@ spec:
         - name: REGISTRY_AUTH_TOKEN_ISSUER
           value: gitlab-issuer
         - name: REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE
-          value: /certs/ca.crt
+          value: /certs/tls.crt
         image: registry:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
