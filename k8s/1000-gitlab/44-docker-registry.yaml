@@ -16,7 +16,9 @@ data:
         service: docker-registry-svc
     storage:
       cache:
-        blobdescriptor: inmemory
+        blobdescriptor: redis
+    redis:
+      addr: redis-svc:6379
     version: 0.1    
 kind: ConfigMap
 metadata:
