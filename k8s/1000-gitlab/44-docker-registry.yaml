@@ -13,7 +13,7 @@ data:
         - nosniff
     log:
       fields:
-        service: docker-registry-svc
+        service: registry
     storage:
       cache:
         blobdescriptor: redis
@@ -69,6 +69,14 @@ spec:
               name: docker-registry-secret
         - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
           value: /var/lib/registry
+        # - name: REGISTRY_AUTH_TOKEN_REALM
+        #   value: https://gitlab.dev.lan/jwt/auth
+        # - name: REGISTRY_AUTH_TOKEN_SERVICE
+        #   value: container_registry
+        # - name: REGISTRY_AUTH_TOKEN_ISSUER
+        #   value: gitlab-issuer
+        - name: REGISTRY_STORAGE_DELETE_ENABLED
+          value: "true"
         image: registry:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
