@@ -83,7 +83,7 @@ spec:
         - name: REGISTRY_AUTH_TOKEN_ISSUER
           value: gitlab-issuer
         - name: REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE
-          value: /root/certs/certbundle
+          value: /certs/ca.crt
         image: registry:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
@@ -116,10 +116,17 @@ spec:
           name: data
         - mountPath: /etc/docker/registry
           name: docker-registry-config
+        - mountPath: /certs
+          name: auth-cert
+          #readOnly: true
       volumes:
-      - configMap:
+      - name: auth-cert
+        secret:
+          secretName: gitlab-home-tls
+      - name: docker-registry-config
+        configMap:
           name: docker-registry-config
-        name: docker-registry-config
+        
   volumeClaimTemplates:
   - metadata:
       name: data

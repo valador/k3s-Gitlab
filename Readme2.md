@@ -112,3 +112,14 @@ cp docker_reg_certs / domain.crt /etc/docker/certs.d/reg.gitlab.dev.lan/ca.crt
 cp docker_reg_certs / domain.crt /usr/local/share/ca-certificates/ca.crt
 update-ca-certificates
 ```
+
+# Create a new registry authentication (RA) certificate and key
+```
+openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -keyout ./k8s/registry/secrets/registry-auth.key -out ./k8s/registry/secrets/registry-auth.crt
+```
+Copy or move RA files into folder named `certs`
+Generate `dhparam.pem` file
+```bash
+openssl dhparam -out ./k8s/registry/secrets/dhparam.pem 2048
+```
+Copy or move `dhparam.pem` file into `certs`

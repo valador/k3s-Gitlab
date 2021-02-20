@@ -25,15 +25,21 @@ prepear-delete:
 	sudo kubectl delete -f ./k8s/0000-global/005-clusterissuer.SELF.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/05-certs.SELF.yml
 	sudo kubectl delete -f ./k8s/utils/gitlab-admin-service-account.yaml
+# Registry auth cert
+.PHONY: registry-cert-up registry-cert-down
+registry-cert-up:
+	sudo kubectl apply -k ./k8s/registry/secrets
+registry-cert-down:
+	sudo kubectl delete -k ./k8s/registry/secrets
 # base gitlab installation
 .PHONY: gitlab-up gitlab-down
-gitlab-up:
+gitlab-up: registry-cert-up
 	sudo kubectl apply -f ./k8s/1000-gitlab/41-postgres.yaml
 	sudo kubectl apply -f ./k8s/1000-gitlab/42-redis.yml
 	sudo kubectl apply -f ./k8s/1000-gitlab/44-docker-registry.yaml
 	sudo kubectl apply -f ./k8s/1000-gitlab/40-deployment.yml
 	sudo kubectl apply -f ./k8s/1000-gitlab/50-ingress.yml
-gitlab-down:
+gitlab-down: registry-cert-down
 	sudo kubectl delete -f ./k8s/1000-gitlab/50-ingress.yml
 	sudo kubectl delete -f ./k8s/1000-gitlab/44-docker-registry.yaml
 	sudo kubectl delete -f ./k8s/1000-gitlab/40-deployment.yml
