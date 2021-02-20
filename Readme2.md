@@ -123,3 +123,11 @@ Generate `dhparam.pem` file
 openssl dhparam -out ./k8s/registry/secrets/dhparam.pem 2048
 ```
 Copy or move `dhparam.pem` file into `certs`
+
+# Примечания
+Ключь
+gitlab_rails['registry_key_path'] = "/certs/tls.key"
+заполняется из файла сертификата
+registry['internal_key'] = "---BEGIN RSA PRIVATE KEY---\nMIIEpQIBAA\n"
+
+# Реест отвалился с self-signed ключем домена
