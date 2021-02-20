@@ -102,3 +102,13 @@ $ kubectl get secret ccp-mysql-cert-secret
 NAME                    TYPE                DATA   AGE
 ccp-mysql-cert-secret   kubernetes.io/tls   2      74m
 ```
+
+# Добавляем самоподписанный сертификат в клиентскую систему
+
+```bash
+kubectl -n gitlab get secret gitlab-home-tls -o json | jq -r '.data["tls.crt"]' | base64 -d > ca.crt
+mkdir -p /etc/docker/certs.d/reg.gitlab.dev.lan
+cp docker_reg_certs / domain.crt /etc/docker/certs.d/reg.gitlab.dev.lan/ca.crt
+cp docker_reg_certs / domain.crt /usr/local/share/ca-certificates/ca.crt
+update-ca-certificates
+```
