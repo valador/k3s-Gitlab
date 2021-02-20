@@ -119,6 +119,7 @@ spec:
                 gitlab_rails['initial_root_password'] = "Ecx85GAZbbRJiV"
                 gitlab_rails['registry_enabled'] = true
                 gitlab_rails['registry_api_url'] = "http://docker-registry-svc:5000"
+                gitlab_rails['registry_issuer'] = "gitlab-issuer"
                 registry_external_url 'https://reg.gitlab.dev.lan'
                 registry_nginx['listen_port'] = 5005
                 registry_nginx['listen_https'] = false

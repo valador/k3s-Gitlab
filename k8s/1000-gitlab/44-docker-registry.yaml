@@ -1,6 +1,13 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: docker-registry
+  name: docker-registry-config
+  namespace: gitlab
 data:
   config.yml: |-
+    version: 0.1
     health:
       storagedriver:
         enabled: true
@@ -12,20 +19,18 @@ data:
         X-Content-Type-Options:
         - nosniff
     log:
+      level: info
       fields:
         service: registry
     storage:
+      filesystem:
+        rootdirectory: /var/lib/registry
+      delete:
+        enabled: true
       cache:
         blobdescriptor: redis
     redis:
-      addr: redis-svc:6379
-    version: 0.1    
-kind: ConfigMap
-metadata:
-  labels:
-    app: docker-registry
-  name: docker-registry-config
-  namespace: gitlab
+      addr: redis-svc:6379    
 ---
 apiVersion: v1
 data:
@@ -67,16 +72,18 @@ spec:
             secretKeyRef:
               key: haSharedSecret
               name: docker-registry-secret
-        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
-          value: /var/lib/registry
-        # - name: REGISTRY_AUTH_TOKEN_REALM
-        #   value: https://gitlab.dev.lan/jwt/auth
-        # - name: REGISTRY_AUTH_TOKEN_SERVICE
-        #   value: container_registry
-        # - name: REGISTRY_AUTH_TOKEN_ISSUER
-        #   value: gitlab-issuer
-        - name: REGISTRY_STORAGE_DELETE_ENABLED
-          value: "true"
+        # - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+        #   value: /var/lib/registry
+        # - name: REGISTRY_STORAGE_DELETE_ENABLED
+        #   value: "true"
+        - name: REGISTRY_AUTH_TOKEN_REALM
+          value: https://gitlab.dev.lan/jwt/auth
+        - name: REGISTRY_AUTH_TOKEN_SERVICE
+          value: container_registry
+        - name: REGISTRY_AUTH_TOKEN_ISSUER
+          value: gitlab-issuer
+        - name: REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE
+          value: /root/certs/certbundle
         image: registry:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
