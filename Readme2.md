@@ -126,7 +126,7 @@ Copy or move `dhparam.pem` file into `certs`
 
 # Примечания
 Ключь
-gitlab_rails['registry_key_path'] = "/certs/tls.key"
+gitlab_rails['registry_key_path'] = "/certs/auth.key"
 заполняется из файла сертификата
 registry['internal_key'] = "---BEGIN RSA PRIVATE KEY---\nMIIEpQIBAA\n"
 
