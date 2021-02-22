@@ -54,8 +54,7 @@ gitlab-runner-down:
 gitlab-purge:
 	sudo kubectl delete -n gitlab persistentvolumeclaim postgresql-postgresql-0
 	sudo kubectl delete -n gitlab persistentvolumeclaim data-docker-registry-0
-	sudo rm -rf /srv/gitlab
-	sudo rm -rf /srv/gitlab-redis
+	sudo rm -rf /srv
 # for ./secrets dir
 .PHONY: cluster-secrets
 cluster-secrets:

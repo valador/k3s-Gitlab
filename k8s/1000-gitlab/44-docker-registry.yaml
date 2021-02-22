@@ -19,7 +19,7 @@ data:
         X-Content-Type-Options:
         - nosniff
     log:
-      level: info
+      level: debug
       fields:
         service: registry
     storage:
@@ -76,14 +76,14 @@ spec:
         #   value: /var/lib/registry
         # - name: REGISTRY_STORAGE_DELETE_ENABLED
         #   value: "true"
-        - name: REGISTRY_AUTH_TOKEN_REALM
-          value: https://gitlab.dev.lan/jwt/auth
-        - name: REGISTRY_AUTH_TOKEN_SERVICE
-          value: container_registry
-        - name: REGISTRY_AUTH_TOKEN_ISSUER
-          value: gitlab-issuer
-        - name: REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE
-          value: /certs/tls.crt
+        # - name: REGISTRY_AUTH_TOKEN_REALM
+        #   value: http://gitlab-svc/jwt/auth
+        # - name: REGISTRY_AUTH_TOKEN_SERVICE
+        #   value: container_registry
+        # - name: REGISTRY_AUTH_TOKEN_ISSUER
+        #   value: gitlab-issuer
+        # - name: REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE
+        #   value: /certs/tls.crt
         image: registry:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:

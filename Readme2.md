@@ -126,8 +126,12 @@ Copy or move `dhparam.pem` file into `certs`
 
 # Примечания
 Ключь
-gitlab_rails['registry_key_path'] = "/certs/auth.key"
-заполняется из файла сертификата
+gitlab_rails['registry_key_path'] = "/var/opt/gitlab/gitlab-rails/certificate.key"
+заполняется из сертификата
 registry['internal_key'] = "---BEGIN RSA PRIVATE KEY---\nMIIEpQIBAA\n"
+registry['internal_key'] = "/certs/tls.key"
 
-# Реест отвалился с self-signed ключем домена
+С опциями
+gitlab_rails['registry_issuer'] = "gitlab-issuer"
+registry['internal_key'] = "/certs/tls.key"
+требует токен авторизации при логине

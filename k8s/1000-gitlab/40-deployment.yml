@@ -121,10 +121,13 @@ spec:
                 gitlab_rails['registry_api_url'] = "http://docker-registry-svc:5000"
                 gitlab_rails['registry_issuer'] = "gitlab-issuer"
                 registry['internal_key'] = "/certs/tls.key"
-                gitlab_rails['registry_key_path'] = "/certs/auth.key"
                 registry_external_url 'https://reg.gitlab.dev.lan'
                 registry_nginx['listen_port'] = 5005
                 registry_nginx['listen_https'] = false
+                registry_nginx['proxy_set_headers'] = {
+                  'X-Forwarded-Proto' => 'https',
+                  'X-Forwarded-Ssl' => 'on'
+                }
           volumeMounts:
             - name: gitlab
               mountPath: /etc/gitlab
@@ -134,7 +137,7 @@ spec:
               #subPath: gitlab_data
             - mountPath: /certs
               name: auth-cert
-              readOnly: true
+              #readOnly: true
 
           ports:
             - name: http-web
